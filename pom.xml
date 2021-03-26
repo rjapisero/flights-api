@@ -33,6 +33,20 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
+				<configuration>
+					<cloudHubDeployment>
+						<objectStoreV2>true</objectStoreV2>
+						<uri>https://anypoint.mulesoft.com/</uri>
+						<muleVersion>${app.runtime}</muleVersion>
+						<username>rakeshjainapisero1213</username>
+						<password>Mulesoft@123</password>
+						<applicationName>process-flight-api</applicationName>
+						<environment>Sandbox</environment>
+						<workerType>MICRO</workerType>
+						<workers>1</workers>
+						<region>us-east-2</region>
+					</cloudHubDeployment>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
@@ -55,18 +69,7 @@
 							<format>html</format>
 						</formats>
 					</coverage>
-					<cloudHubDeployment>
-						<objectStoreV2>true</objectStoreV2>
-						<uri>https://anypoint.mulesoft.com/</uri>
-						<muleVersion>${app.runtime}</muleVersion>
-						<username>rakeshjainapisero1213</username>
-						<password>Mulesoft@123</password>
-						<applicationName>process-flight-api</applicationName>
-						<environment>Sandbox</environment>
-						<workerType>MICRO</workerType>
-						<workers>1</workers>
-						<region>us-east-2</region>
-					</cloudHubDeployment>
+
 
 				</configuration>
 			</plugin>
