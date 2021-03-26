@@ -1,0 +1,23 @@
+{
+  "departureFlight": {
+    "source": "Mumbai",
+    "destination": "Delhi",
+    "name": "INDIGO",
+    "price": 12000,
+    "time": "2021-07-23T21:00:00",
+    "flightID": "IND0001",
+    "emailID": "abc@xyz.com",
+    "user": [
+      {
+        "gender": "Male",
+        "firstName": "Rakesh",
+        "LastName": "Jain"
+      },
+      {
+        "gender": "Male",
+        "firstName": "Pankaj",
+        "LastName": "Jain"
+      }
+    ]
+  }
+}

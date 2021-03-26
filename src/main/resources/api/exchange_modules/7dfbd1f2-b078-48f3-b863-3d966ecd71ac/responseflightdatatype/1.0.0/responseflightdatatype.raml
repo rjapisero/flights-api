@@ -1,0 +1,14 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  departureFlights:
+    type: array
+    required: true
+    items:
+      type: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flightdatatype/1.0.0/flightdatatype.raml
+  returnFlights:
+    type: array
+    required: false
+    items:
+      type: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flightdatatype/1.0.0/flightdatatype.raml

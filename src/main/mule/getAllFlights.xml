@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<sub-flow name="returnLogic" doc:id="76c39390-4c06-442d-ab12-0e17d7e414fd" >
+		<choice doc:name="Choice" doc:id="89a4fc5c-8af7-42e9-8a0b-507092f0ccfd">
+					<when expression="#[not isEmpty(vars.returnDate)]">
+						<http:request method="GET" doc:name="getReturnFlightDetails" doc:id="8a64d6e1-205e-49d4-8f7f-22d714113ad6" config-ref="HTTP_Request_configuration" path="/flights" responseTimeout="${httpRequest.timeout}" target="returnResponse">
+							<reconnect frequency="${httpRequest.reconnectionTime}" count="${httpRequest.reconnectionCount}" />
+							<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : vars.destination,
+	"departureDate" : vars.returnDate,
+	"destination" : vars.source
+}]]]></http:query-params>
+						</http:request>
+						<json-logger:logger doc:name="Logger" doc:id="57c3076e-be67-4e07-8563-87de657c935b" config-ref="JSON_Logger_Config" message="Return journey flights received" >
+					<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: JSONLoggerModule::stringifyNonJSON(vars.returnResponse) 
+}]]]></json-logger:content>
+				</json-logger:logger>
+				<set-variable value="#[typeOf(vars.returnResponse)]" doc:name="typeOfResponse" doc:id="6ca6b2e7-9752-4732-b549-810dc1a1ca3c" variableName="typeOfResponse" />
+						<flow-ref doc:name="createReturnResponse" doc:id="ecb142bf-f660-41e3-b5f9-4e318c1837c8" name="getReturnResponse"/>
+					</when>
+					<otherwise>
+				<json-logger:logger doc:name="Logger" doc:id="e800ac31-11b9-4e68-843b-d936caf20b2d" config-ref="JSON_Logger_Config" message="User has not opted for any return journey">
+					<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: JSONLoggerModule::stringifyNonJSON(payload default {}) 
+}]]]></json-logger:content>
+				</json-logger:logger>
+					</otherwise>
+				</choice>
+	</sub-flow>
+	<sub-flow name="getReturnResponse" doc:id="962f463c-5d94-46fb-babb-df21923550ed" >
+		<choice doc:name="Choice" doc:id="2cbe1074-b78b-401e-a8e6-108349a6c4fb">
+							<when expression='#[vars.typeOfResponse == "Array"]'>
+				<set-variable value="#[output application/json&#10;---&#10;{&#10;	returnFlights: vars.returnResponse&#10;}]" doc:name="retRes" doc:id="7d960d38-318c-442b-8f4a-28412d00917e" variableName="retRes" />
+				<json-logger:logger doc:name="Logger" doc:id="1038e0e3-2621-45fe-89c3-06e11acb4bac" config-ref="JSON_Logger_Config" message="Inside when of return flight"/>
+							</when>
+							<otherwise>
+								<set-variable value="#[output application/json&#10;---&#10;returnFlights:vars.returnResponse]" doc:name="retRes" doc:id="281d2f8c-ee65-4a80-821a-5bef25ecc4d1" variableName="retRes"/>
+				<json-logger:logger doc:name="Logger" doc:id="db269cf8-e8a8-4e5e-a9b3-0e8d1a8efbb3" config-ref="JSON_Logger_Config" message="Inside default of return flight"/>
+							</otherwise>
+						</choice>
+	</sub-flow>
+	<sub-flow name="getDepartureResponse" doc:id="cd1459c9-1add-410a-a832-fc333090b0ef" >
+		<choice doc:name="Choice" doc:id="8a6a49b2-3258-4a94-bda9-07742bfc8f81">
+					<when expression='#[vars.typeOfResponse == "Array"]'>
+						<set-variable value="#[output application/json&#10;---&#10;{&#10;	departureFlights: vars.departureResponse&#10;}]" doc:name="depRes" doc:id="b7ffee8a-cb34-4325-94f7-def292dc83d0" variableName="depRes"/>
+				<json-logger:logger doc:name="Logger" doc:id="62d0c11d-b7e6-4bac-9a09-8899eff05a75" config-ref="JSON_Logger_Config" message="Inside when of Departure flights">
+					<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: JSONLoggerModule::stringifyNonJSON(vars.departureResponse) 
+}]]]></json-logger:content>
+				</json-logger:logger>
+					</when>
+					<otherwise>
+						<set-variable value="#[output application/json&#10;---&#10;departureFlights: vars.departureResponse]" doc:name="depRes" doc:id="bcb75c6d-5c23-4664-8695-58b41d8a1f56" variableName="depRes"/>
+				<json-logger:logger doc:name="Logger" doc:id="78b6ce93-b80f-424c-80d1-5a3e66bb0690" config-ref="JSON_Logger_Config" message="Inside default of Departure flight"/>
+					</otherwise>
+				</choice>
+	</sub-flow>
+	<sub-flow name="setVariables" doc:id="8db00edb-acf3-4617-b901-36da2462a049" >
+		<set-variable value="#[attributes.queryParams.source]" doc:name="source" doc:id="50c55234-e56a-4596-acf3-3e5f91f8aab6" variableName="source" />
+		<set-variable value="#[attributes.queryParams.destination]" doc:name="destination" doc:id="2bc6ddaf-23c3-455a-ab3f-9f897953e65a" variableName="destination" />
+		<set-variable value="#[attributes.queryParams.departureDate]" doc:name="departureDate" doc:id="20c91841-2772-4305-a5df-7b2eddac0f30" variableName="departureDate" />
+		<set-variable value="#[attributes.queryParams.returnDate]" doc:name="returnDate" doc:id="e55449af-189b-42bb-adad-c251b572e739" variableName="returnDate" />
+		<set-variable value="#[attributes.queryParams.noOfTravellers]" doc:name="noOfUsers" doc:id="4f0decfc-13f2-4813-9653-80d7dc5c37b0" variableName="noOfUsers" />
+	</sub-flow>
+	<flow name="getAllFlights" doc:id="edbb1059-5fe9-42aa-b467-1d631d9dd4ea" >
+		<json-logger:logger doc:name="Logger" doc:id="0269a46a-c5bf-439b-9c78-5bb73f4ba631" config-ref="JSON_Logger_Config" message="Request received to get all available flights">
+			<json-logger:content ><![CDATA[#[import modules::JSONLoggerModule output application/json ---
+{
+    payload: JSONLoggerModule::stringifyNonJSON(attributes) 
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<flow-ref doc:name="Flow Reference" doc:id="47f8bb86-2c6a-4b96-9745-cf9effd3b940" name="setVariables" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="7031f605-5822-4c66-9bff-351e9c2d4081" >
+			<route >
+				<http:request method="GET" doc:name="getDepartureFlightDetails" doc:id="d6ac44cb-ca2f-4f59-9ce0-c46697350423" config-ref="HTTP_Request_configuration" responseTimeout="${httpRequest.timeout}" target="departureResponse" path="/flights">
+			<reconnect frequency="${httpRequest.reconnectionTime}" count="${httpRequest.reconnectionCount}" />
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"source" : vars.source,
+	"departureDate" : vars.departureDate,
+	"destination" : vars.destination
+}]]]></http:query-params>
+		</http:request>
+				<set-variable value="#[typeOf(vars.departureResponse)]" doc:name="typeOfResponse" doc:id="eb2f391d-9a2e-414f-837b-c6279c892c74" variableName="typeOfResponse"/>
+				<flow-ref doc:name="createDepartureResponse" doc:id="e6ad89cb-29d1-4787-8401-48455098574a" name="getDepartureResponse"/>
+			</route>
+			<route>
+				<flow-ref doc:name="Flow Reference" doc:id="3206af52-adc1-4167-9e41-18df9334a71b" name="returnLogic" />
+			</route>
+		</scatter-gather>
+		<choice doc:name="Choice" doc:id="901b24b4-4fd0-4b85-a56b-380dd0b172d7" >
+			<when expression="#[not isEmpty(vars.retRes)]">
+				<set-payload value="#[output application/json&#10;---&#10;vars.depRes ++ vars.retRes]" doc:name="Set Payload" doc:id="9fc71f43-ecb2-44e5-9920-90e0196c5103" />
+			</when>
+			<otherwise >
+				<set-payload value="#[output application/json&#10;---&#10;vars.depRes]" doc:name="Set Payload" doc:id="0b35e79a-e0b1-4725-ba69-bd99a01adfb1" />
+			</otherwise>
+		</choice>
+		<json-logger:logger doc:name="Logger" doc:id="45f875a4-8289-4c4f-8779-650c7bbb789c" config-ref="JSON_Logger_Config" message="After the flight details are processed"/>
+	</flow>
+</mule>

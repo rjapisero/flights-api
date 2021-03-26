@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="10006514-0fc8-420a-bcd1-28e24d94dff7" >
+		<http:listener-connection host="${http.host}" port="${http.port}" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="45dfc1f8-e3d5-40b6-a4de-c3cb336497d0" basePath="${httpRequest.basePath}">
+		<http:request-connection host="${httpRequest.host}" port="${httpRequest.port}" />
+	</http:request-config>
+	<global-property doc:name="Global Property" doc:id="703100a3-0117-4171-acb9-70007f0aee24" name="environment" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="5c5f4dd2-0091-410d-b8e1-57c159d6a4aa" file="${environment}-config.yaml" />
+	<configuration doc:name="Configuration" doc:id="561c010e-5288-41c0-adac-abc504ecf263" defaultErrorHandler-ref="globalError_Handler" />
+		<api-gateway:autodiscovery apiId="16714454" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="1b6582f3-733e-42d7-bb93-dec5f18558e2" flowRef="process-flights-api-main" />
+	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="b5a8fbbe-61c0-4430-a07e-36fa657492b1" environment="${environment}" />
+	<error-handler name="globalError_Handler" doc:id="1bcfbe43-5fa9-4e2c-bcb4-646463618f9d" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="efa355b1-91bf-4793-9807-618ac7e61ca0" >
+			<set-payload value='#[output application/json --- {message: "Your request could not be processed at this time.Please try again later."}]' doc:name="Set Payload" doc:id="800fb742-a08c-43a8-a50f-19e72e541a7d" />
+			<logger level="INFO" doc:name="Logger" doc:id="f81606fe-060d-4bf2-ae93-96c42394056b" message="#[error.description]" />
+		</on-error-continue>
+	</error-handler>
+</mule>

@@ -1,0 +1,84 @@
+#%RAML 1.0
+title: Process  Flights API
+
+uses:
+  flight: /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flight-lib/1.0.0/flight-lib.raml
+
+traits:
+  client-id-required:
+    headers:
+      client_id: string
+      client_secret: string
+    responses:
+      401:
+        description: Unauthorized or invalid client application credentials
+
+/flights:
+  is: [client-id-required]
+  get:
+    queryParameters:
+      source: string
+      destination: string
+      departureDate: date-only
+      returnDate?: date-only
+      noOfTravellers:
+        required: true
+        default : '1'
+    responses:
+      200:
+        body:
+          application/json:
+            type: flight.flightResponse
+            examples:
+              output: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flight-lib/1.0.0/examples/respFltDatTypExamples.raml
+      404:
+        body:
+          application/json:
+            example:
+              output: Bad Request.Either Source or Destination or Departure date is missing.
+
+  post:
+    body:
+      application/json:
+        type: flight.bookingRequest
+        examples:
+          input: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flight-lib/1.0.0/examples/reqFltDatTypExample.raml
+    responses:
+      201:
+        body:
+          application/json:
+            example: Flight booked successfully. Your Reference number is REF0001
+
+  patch:
+    body:
+      application/json:
+        type: flight.bookingRequest
+        examples:
+          input: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flight-lib/1.0.0/examples/reqFltDatTypRefNoExample.raml
+    responses:
+      201:
+        body:
+          application/json:
+            example: Flight Details updated successfully.
+
+  /{emailID}:
+    is: [client-id-required]
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: flight.bookingResponse[]
+              examples:
+                output: !include /exchange_modules/7dfbd1f2-b078-48f3-b863-3d966ecd71ac/flight-lib/1.0.0/examples/respUserBookings.raml
+
+    /{bookingID}:
+      is: [client-id-required]
+      delete:
+        responses:
+          200:
+            body:
+              application/json:
+                example:
+                  message: Your Flight has been cancelled.
+                

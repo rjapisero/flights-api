@@ -1,0 +1,23 @@
+{
+  "returnFlight": {
+    "source": "Delhi",
+    "destination": "Mumbai",
+    "name": "INDIGO",
+    "price": 4500,
+    "time": "2021-07-25T21:00:00",
+    "flightID": "IND0002",
+    "emailID": "abc@xyz.com",
+    "user": [
+      {
+        "gender": "Male",
+        "firstName": "Rakesh",
+        "LastName": "Jain"
+      },
+      {
+        "gender": "Male",
+        "firstName": "Pankaj",
+        "LastName": "Jain"
+      }
+    ]
+  }
+}

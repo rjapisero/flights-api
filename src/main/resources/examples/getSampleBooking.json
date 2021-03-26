@@ -1,0 +1,44 @@
+{
+	"departureFlights": [
+		{
+			"source": "Mumbai",
+			"destination": "Delhi",
+			"departureDate": "2021-07-23",
+			"flightID": "IND0001",
+			"name": "INDIGO",
+			"price": 12000,
+			"time": "2021-07-23T21:00:00",
+			"emptySeats": 300
+		},
+		{
+			"source": "Mumbai",
+			"destination": "Chennai",
+			"departureDate": "2021-05-23",
+			"flightID": "IND0002",
+			"name": "INDIGO",
+			"price": 10500,
+			"time": "2021-05-23T19:00:00",
+			"emptySeats": 350
+		}
+	],
+	"returnFlights": [
+		{
+			"source": "Delhi",
+			"destination": "Mumbai",
+			"flightID": "IND0003",
+			"name": "INDIGO",
+			"price": 15000,
+			"time": "2021-07-27T21:00:00",
+			"emptySeats": 150
+		},
+		{
+			"source": "Mumbai",
+			"destination": "Chennai",
+			"flightID": "IND0004",
+			"name": "INDIGO",
+			"price": 12000,
+			"time": "2021-05-26T19:00:00",
+			"emptySeats": 50
+		}
+	]
+}
