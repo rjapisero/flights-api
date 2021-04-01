@@ -38,8 +38,8 @@
 					<cloudHubDeployment>
 						<objectStoreV2>true</objectStoreV2>
 						<uri>https://anypoint.mulesoft.com/</uri>
-						<muleVersion>${mule.version}</muleVersion>
-						<!-- <muleVersion>4.3.0</muleVersion> -->
+						<!-- <muleVersion>${mule.version}</muleVersion> -->
+						<muleVersion>4.3.0</muleVersion>
 						<username>rakeshjainapisero1213</username>
 						<password>Mulesoft@123</password>
 						<applicationName>process-flight-api</applicationName>
