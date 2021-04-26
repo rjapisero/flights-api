@@ -5,7 +5,7 @@ http:
   reconnectionTime: "3"
   
 httpRequest:
-  host: "system-flight-api.us-e2.cloudhub.io"
+  host: "system-flight-api-new.us-e2.cloudhub.io"
   port: "80"
   timeout: "10000"
   basePath: "/sysapi"

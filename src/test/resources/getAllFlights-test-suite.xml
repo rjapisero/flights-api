@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="getAllFlights-test-suite.xml" />
+	<munit:test name="DepartureFlightsTestCase" doc:id="93312b45-924e-40b3-8e36-3fd7baeea126" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="f101983c-60d5-4695-a98a-e227b398955f" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getDepartureFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d6ac44cb-ca2f-4f59-9ce0-c46697350423" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\departureFlights.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="95f7deb7-f024-4995-8ac9-0d5d28af13f2" >
+				<munit:attributes value="#[{queryParams : {source:'Mumbai',destination:'Delhi',departureDate:'2021-03-16',noOfTravellers:'2'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getAllFlights" doc:id="ac927bbb-0e68-4838-9aa8-e1fd8059f32e" name="getAllFlights"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c2eb6a17-4bc0-4b51-bcfa-7cd7acb5f1ed" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="DepartureFailureTestCase" doc:id="840f6771-b40e-43bc-beaa-713b822bd54f" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="24ee6727-0fc6-4af6-b49f-efd387e6659f" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getDepartureFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d6ac44cb-ca2f-4f59-9ce0-c46697350423" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\depRetNotFound.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="05658a54-a9cc-4904-9ff0-f7d944b93fbc" >
+				<munit:attributes value="#[{queryParams : {source:'Mumbai',destination:'Chennai',departureDate:'2021-03-16',noOfTravellers:'2'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getAllFlights" doc:id="43f7197f-0557-4325-80a0-2f76b4ae2b16" name="getAllFlights" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6eb50eaf-8db1-4267-b212-ffdebda40b59" is="#[MunitTools::notNullValue()]" expression="#[payload]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="departureReturnFlightsTestCase" doc:id="d2ed7676-b51c-434c-827c-1831af01a06a">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9c148ec9-c48c-4b83-a6a4-64b54ae22ba0" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getDepartureFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d6ac44cb-ca2f-4f59-9ce0-c46697350423" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\departureFlights.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a48c38ee-960e-4542-b87e-b73af346a72a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getReturnFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="8a64d6e1-205e-49d4-8f7f-22d714113ad6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\depReturnFlights.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="fd2a2e93-713c-4d1f-bacb-676a607c8c47">
+				<munit:attributes value="#[{queryParams : {source:'Mumbai',destination:'Delhi',departureDate:'2021-03-16',noOfTravellers:'2'}}]" />
+				<munit:variables >
+					<munit:variable key="source" value="Mumbai" />
+					<munit:variable key="destination" value="Delhi" />
+					<munit:variable key="departureDate" value="2021-03-16" />
+					<munit:variable key="returnDate" value="2021-03-21" />
+					<munit:variable key="noOfTravellers" value="2" />
+					<munit:variable key="retRes" value="testValue" />
+				</munit:variables>
+				</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getAllFlights" doc:id="70454248-9ba9-4906-aca9-55be55fbe696" name="getAllFlights" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8993710e-f9e8-41f5-afe4-24a2e75b18de" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="returnFailureTestCase" doc:id="a7b93246-264f-4bf2-ba05-1d96ef4bd73e" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="aae548d4-f44e-4ebd-94e1-36a50117cc1d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getDepartureFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d6ac44cb-ca2f-4f59-9ce0-c46697350423" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\depRetNotFound.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0f988566-d001-41b7-b5d0-61877c4759e6" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getReturnFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="8a64d6e1-205e-49d4-8f7f-22d714113ad6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\depRetNotFound.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="fe0763ef-38c1-4347-977d-6cfe2d9e6877" >
+				<munit:attributes value="#[{queryParams : {source:'Mumbai',destination:'Chennai',departureDate:'2021-03-16',noOfTravellers:'2'}}]" />
+				<munit:variables >
+					<munit:variable key="source" value="Mumbai" />
+					<munit:variable key="destination" value="Delhi" />
+					<munit:variable key="departureDate" value="2021-03-16" />
+					<munit:variable key="returnDate" value="2021-03-21" />
+					<munit:variable key="noOfTravellers" value="2" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getAllFlights" doc:id="77d654b8-b739-4977-a40e-1d6ba1745a35" name="getAllFlights" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="db8617f6-aa89-4c30-99dd-2d59fe6e6825" is="#[MunitTools::notNullValue()]" expression="#[payload]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getAllFlights-test-suite-returnLogicTest" doc:id="15cb85b2-8ffd-4463-b30d-a6c4bc9168b8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b888f75a-dd4b-4470-b729-0e53371d1197" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getReturnFlightDetails" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="8a64d6e1-205e-49d4-8f7f-22d714113ad6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://sample_data\depReturnFlights.json')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="0e1cabe1-dd32-4c03-ac45-6027b0be8acd">
+				<munit:attributes value="#[{queryParams : {source:'Mumbai',destination:'Chennai',departureDate:'2021-03-16',noOfTravellers:'2'}}]" />
+				<munit:variables>
+					<munit:variable key="source" value="Mumbai" />
+					<munit:variable key="destination" value="Delhi" />
+					<munit:variable key="departureDate" value="2021-03-16" />
+					<munit:variable key="returnDate" value="2021-03-21" />
+					<munit:variable key="noOfTravellers" value="2" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to returnLogic" doc:id="10eaed53-1d6f-4063-9c7d-a7168e6da37e" name="returnLogic"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3864c6c4-7aea-402a-b0f2-4ceaa72fa04f" is="#[MunitTools::notNullValue()]" expression="#[payload]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getAllFlights-test-suite-returnLogicTest_default" doc:id="debf1f39-2a24-4dea-861c-d1044eee979b" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to returnLogic" doc:id="9f19eb80-756d-443f-a4c3-86207fd1f925" name="returnLogic"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="getAllFlights-test-suite-getReturnResponseTest" doc:id="198faf74-048e-4bec-bf8c-0836bb40e3e8" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="a5728c92-d15f-4409-b3d7-03a3b975fb16" >
+				<munit:variables >
+					<munit:variable key="typeOfResponse" value="Array" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getReturnResponse" doc:id="944a3dba-1e56-4f28-a4b9-59d9b7b477fa" name="getReturnResponse"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="getAllFlights-test-suite-getDepartureResponseTest" doc:id="5b987b88-0812-4b1d-983a-62c3c669da79" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="38abae11-b77d-45f0-9578-c6f899e14d13">
+				<munit:variables>
+					<munit:variable key="typeOfResponse" value="Array" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getDepartureResponse" doc:id="ad9719c6-2098-4c28-bf86-592e3263807f" name="getDepartureResponse"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>
