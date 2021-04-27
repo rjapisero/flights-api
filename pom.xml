@@ -40,7 +40,7 @@
 						<!-- <muleVersion>4.3.0</muleVersion> -->
 						<username>rakeshjain976699</username>
 						<password>Mulesoft@123</password>
-						<businessGroup>Test</businessGroup>
+						<!-- <businessGroup>Test</businessGroup> -->
 						<businessGroupId>de84e389-0b8f-4847-ae12-5479de3c3bcf</businessGroupId>
 						<applicationName>process-flight-api</applicationName>
 						<environment>Sandbox</environment>
