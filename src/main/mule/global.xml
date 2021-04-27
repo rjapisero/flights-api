@@ -16,7 +16,6 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
 	<configuration-properties doc:name="Configuration properties" doc:id="5c5f4dd2-0091-410d-b8e1-57c159d6a4aa" file="${environment}-config.yaml" />
 	<configuration doc:name="Configuration" doc:id="561c010e-5288-41c0-adac-abc504ecf263" defaultErrorHandler-ref="globalError_Handler" />
 	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="b5a8fbbe-61c0-4430-a07e-36fa657492b1" environment="${environment}" />
-	<api-gateway:autodiscovery apiId="16808678" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f93ecdfb-bfad-4fe7-a28b-06e0c7b6a84e" flowRef="process-flights-api-main" />
 	<error-handler name="globalError_Handler" doc:id="1bcfbe43-5fa9-4e2c-bcb4-646463618f9d" >
 		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="efa355b1-91bf-4793-9807-618ac7e61ca0" >
 			<set-payload value='#[output application/json --- {message: "Your request could not be processed at this time.Please try again later."}]' doc:name="Set Payload" doc:id="800fb742-a08c-43a8-a50f-19e72e541a7d" />
