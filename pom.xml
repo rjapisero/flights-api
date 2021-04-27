@@ -41,16 +41,12 @@
 						<username>rakeshjain976699</username>
 						<password>Mulesoft@123</password>
 						<!-- <businessGroup>Apisero\Test</businessGroup> -->
-						<businessGroupId>de84e389-0b8f-4847-ae12-5479de3c3bcf</businessGroupId>
+						<businessGroupId>b43807af-cd2b-4be6-9e3b-2ae80226e7bd</businessGroupId>
 						<applicationName>process-flight-api</applicationName>
 						<environment>Sandbox</environment>
 						<workerType>MICRO</workerType>
 						<workers>1</workers>
 						<region>us-east-2</region>
-						<properties>
-							<anypoint.platform.client_id>424801196bc9430b99e1bf93aa3830cc</anypoint.platform.client_id>
-							<anypoint.platform.client_secret>3b72CecB7b554d549a1795C4ebef6f4A</anypoint.platform.client_secret>
-						</properties>
 					</cloudHubDeployment>
 					<classifier>mule-application</classifier>
 				</configuration>
