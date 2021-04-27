@@ -46,6 +46,10 @@
 						<workerType>MICRO</workerType>
 						<workers>1</workers>
 						<region>us-east-2</region>
+						<properties>
+							<anypoint.platform.client_id>fd10e0914e2745c5b033fa12a958c7a4</anypoint.platform.client_id>
+							<anypoint.platform.client_secret>FC16C77749De490981d12a8B2F8e4ea2</anypoint.platform.client_secret>
+						</properties>
 					</cloudHubDeployment>
 					<classifier>mule-application</classifier>
 				</configuration>
