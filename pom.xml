@@ -38,10 +38,10 @@
 						<uri>https://anypoint.mulesoft.com/</uri>
 						<muleVersion>${mule.version}</muleVersion>
 						<!-- <muleVersion>4.3.0</muleVersion> -->
-						<username>rakeshjain976699</username>
-						<password>Mulesoft@123</password>
+						<username>${username}</username>
+						<password>${password}</password>
 						<!-- <businessGroup>Apisero\Test</businessGroup> -->
-						<businessGroupId>b43807af-cd2b-4be6-9e3b-2ae80226e7bd</businessGroupId>
+						<businessGroupId>${businessGroupId}</businessGroupId>
 						<applicationName>process-flight-api-b</applicationName>
 						<environment>Sandbox</environment>
 						<workerType>MICRO</workerType>
@@ -134,6 +134,12 @@
 			<url>https://maven.anypoint.mulesoft.com/api/v2/maven</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+            <id>Exchange2</id>
+            <name>Exchange2 Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/ORG_ID_TOKEN/maven</url>
+            <layout>default</layout>
+        </repository>
 		<repository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
